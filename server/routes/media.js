@@ -12,7 +12,7 @@ const queue = new Queue('ytdl', {
   }
 });
 
-const VIDEO_ITAG = 18;
+const VIDEO_ITAG = [18, 34, 35, 93, 94, 92] ;
 const MEDIA_DIR = path.join(__dirname, '..', '..', 'media');
 
 /**

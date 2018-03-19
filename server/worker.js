@@ -47,7 +47,9 @@ queue.on('ready', function () {
           console.log(`Downloading https://www.youtube.com/watch?v=${job.id}`);
           const stream = ytdl(`https://www.youtube.com/watch?v=${job.id}`, {
             quality: job.data.videoItag
-          }).pipe(fs.createWriteStream(videoPath));
+          })
+          .on('error', (err) => { console.log(`Error with ytdl for job id ${job.id} =>`,err) })
+          .pipe(fs.createWriteStream(videoPath));
 
           stream.on('finish', () => {
             console.log('ytdl finished streaming.');
