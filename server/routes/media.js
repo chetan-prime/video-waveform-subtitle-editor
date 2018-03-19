@@ -7,12 +7,12 @@ const crypto = require('crypto');
 const router = express.Router();
 const queue = new Queue('ytdl', {
   redis: {
-    host: 'redis',
+    host: 'localhost',
     port: 6379
   }
 });
 
-const VIDEO_ITAG = 43;
+const VIDEO_ITAG = 18;
 const MEDIA_DIR = path.join(__dirname, '..', '..', 'media');
 
 /**
@@ -31,6 +31,8 @@ router.post('/', function(req, res, next) {
   let job;
   let mediaFilename;
   let filePromise = Promise.resolve();
+  
+  console.log("POST request received on "+req.originalUrl);
 
   if (ytdl.validateURL(ytUri)) {
     mediaFilename = ytdl.getURLVideoID(ytUri);
@@ -41,12 +43,16 @@ router.post('/', function(req, res, next) {
     const videoFile = req.files.video;
     mediaFilename = md5(req.files.video.data);
     job = queue.createJob({}).setId(mediaFilename);
-    filePromise = filePromise.then(videoFile.mv(path.join(MEDIA_DIR, `${mediaFilename}.webm`)));
+    filePromise = filePromise.then(videoFile.mv(path.join(MEDIA_DIR, `${mediaFilename}.mp4`)));
   }
 
   filePromise
-    .then(srtFile.mv(path.join(MEDIA_DIR, `${mediaFilename}.srt`)))
-    .then(job.save())
+    .then(function() {
+    	console.log(`File saved to ${mediaFilename}.mp4`);
+    	srtFile.mv(path.join(MEDIA_DIR, `${mediaFilename}.srt`));
+    	console.log("filePromise returned, saving job");
+    	job.save();
+    })
     .catch((err) => {
       console.log(`${err.message}`);
     });

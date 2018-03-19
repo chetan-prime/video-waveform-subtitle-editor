@@ -1165,7 +1165,7 @@ fetch(`${YTID}.srt`)
 
     playlist.load([
       {
-        src: `${YTID}.ogg`
+        src: `${YTID}.m4a`
       }
     ]).then(function() {
       //can do stuff with the playlist.
@@ -5637,7 +5637,7 @@ var _class = function (_Loader) {
       return new Promise(function (resolve, reject) {
         if (_this2.src.type.match(/audio.*/) ||
         // added for problems with Firefox mime types + ogg.
-        _this2.src.type.match(/video\/ogg/)) {
+        _this2.src.type.match(/video\/mp4/)) {
           var fr = new FileReader();
 
           fr.readAsArrayBuffer(_this2.src);

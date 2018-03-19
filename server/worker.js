@@ -6,7 +6,7 @@ const ffmpeg = require('fluent-ffmpeg');
 
 const queue = new Queue('ytdl', {
   redis: {
-    host: 'redis',
+    host: 'localhost',
     port: 6379
   },
   removeOnSuccess: true,
@@ -34,11 +34,12 @@ function extractAudio(videoPath, audioPath, done) {
 const MEDIA_DIR = path.join(__dirname, '..', 'media');
 
 queue.on('ready', function () {
+  console.log("queue is ready");
   queue.process(function (job, done) {
     console.log(`processing job ${job.id}`);
 
-    const videoPath = path.join(MEDIA_DIR, `${job.id}.webm`);
-    const audioPath = path.join(MEDIA_DIR, `${job.id}.ogg`);
+    const videoPath = path.join(MEDIA_DIR, `${job.id}.mp4`);
+    const audioPath = path.join(MEDIA_DIR, `${job.id}.m4a`);
 
     fs.access(audioPath, fs.constants.R_OK, (err) => {
       if (err) {

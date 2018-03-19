@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:ytid', function(req, res, next) {
   const ytid = req.params.ytid;
-  const audioPath = path.join(__dirname, '..', '..', 'media', `${ytid}.ogg`);
+  const audioPath = path.join(__dirname, '..', '..', 'media', `${ytid}.m4a`);
 
   fs.access(audioPath, fs.constants.R_OK, (err) => {
     if (err) {
